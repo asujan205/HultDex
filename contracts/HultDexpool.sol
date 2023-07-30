@@ -29,35 +29,43 @@ constructor(address token1address) {
     _token1address = token1address;
 }
 
-function contribute() external {
-    require(userInfo[msg.sender].balance > 0, "User does not have an active pool");
 
-        // Calculate the interest accrued since the last contribution
-        uint256 timeSinceLastContribution = block.timestamp - userInfo[msg.sender].lastContributionTime;
-        uint256 interestAccrued = (userInfo[msg.sender].balance * userInfo[msg.sender].interestRate * timeSinceLastContribution) / (365 days * 10000);
+function AddLiquidity(uint256 amount) public {
 
-        // Update the user's balance with the interest accrued
-        userInfo[msg.sender].balance += interestAccrued;
-        userInfo[msg.sender].lastContributionTime = block.timestamp;
+    IERC20 token1 = IERC20(_token1address);
+    token1.transferFrom(msg.sender, address(this), amount);
+    totalBalance += amount;
+    userInfo[msg.sender].balance += amount;
+    userInfo[msg.sender].lastContributionTime = block.timestamp;
+    userInfo[msg.sender].interestRate = 100;
+    userInfo[msg.sender].contributionPeriod = 1000;
 }
 
-function withdraw() external {
-    require(userInfo[msg.sender].balance > 0, "User does not have an active pool");
 
-        // Calculate the interest accrued since the last contribution
-        uint256 timeSinceLastContribution = block.timestamp - userInfo[msg.sender].lastContributionTime;
-        uint256 interestAccrued = (userInfo[msg.sender].balance * userInfo[msg.sender].interestRate * timeSinceLastContribution) / (365 days * 10000);
+function WithdrawLiquidity(uint256 _amount) external {
 
-        // Update the user's balance with the interest accrued
-        userInfo[msg.sender].balance += interestAccrued;
-        userInfo[msg.sender].lastContributionTime = block.timestamp;
+    require(userInfo[msg.sender].balance >= _amount, "You don't have enough balance");
+    
+    uint256 timeElapsed = block.timestamp - userInfo[msg.sender].lastContributionTime;
+    uint256 interest = (userInfo[msg.sender].balance * userInfo[msg.sender].interestRate * timeElapsed) / (100 * 365 * 24 * 60 * 60);
+    uint256 amount = userInfo[msg.sender].balance + interest;
 
-        // Transfer the user's balance to their address
-        uint256 balance = userInfo[msg.sender].balance;
-        userInfo[msg.sender].balance = 0;
-        totalBalance -= balance;
-        IERC20(_token1address).transfer(msg.sender, balance);
+
+    IERC20 token1 = IERC20(_token1address);
+    token1.transferFrom(address(this), msg.sender, amount);
+    totalBalance -= amount;
+    userInfo[msg.sender].balance -= amount;
+    userInfo[msg.sender].lastContributionTime = block.timestamp;
+    userInfo[msg.sender].interestRate = 100;
+    userInfo[msg.sender].contributionPeriod = 1000;
 }
 
     
+
+
+
+
+
+    
 }
+
