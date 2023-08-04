@@ -61,22 +61,48 @@ function setFee(uint256 fee) onlyOwner public {
 
 
 
-function mint(address to, uint128 _amount) external {
+function mint(address to, uint128 _amount) external  returns (uint256 amount){
 
     require(_amount > 0, "amount must be greater than 0");
 
-    uint256 _token1Amount = _amount * _reversePrice;
+     require(IERC20(Token1).transferFrom(msg.sender, address(this), _amount));
 
-    uint256 _fee = _token1Amount * _Fee / 10000;
-
-    uint256 _token1AmountAfterFee = _token1Amount - _fee;
-
-    IERC20(Token1).transferFrom(msg.sender, address(this), _token1AmountAfterFee);
 
     userLiqiuidityPosition[to].liquidity = _amount;
-    userLiqiuidityPosition[to].token1Amount = _token1AmountAfterFee;
 
-    emit minted(to, _amount, _token1AmountAfterFee);
+    uint256 amount1 = IERC20(Token1).balanceOf(address(this));
+
+    userLiqiuidityPosition[to].token1Amount = amount1;
+
+
+    emit minted(to, _amount, amount1);
+
+    return amount1;
+
+
+}
+
+
+function burn(uint128 _amount) external  returns (uint256 amount0){
+
+
+    require(_amount > 0, "amount must be greater than 0");
+
+    require(userLiqiuidityPosition[msg.sender].liquidity >= _amount, "amount must be less than or equal to your liquidity");
+
+   
+    return amount0;
+    
+
+
+
+
+
+
+
+
+
+
 
 }
 
