@@ -18,6 +18,15 @@ contract HultDexpool {
         _;
     }
 
+    struct UserLiqiuidityPosition {
+         uint128 liquidity;
+            uint256 token1Amount;
+
+      
+    }
+
+    mapping (address => UserLiqiuidityPosition) public userLiqiuidityPosition;
+
     constructor(address _Token1) {
         owner = msg.sender;
         Token1 = _Token1;
