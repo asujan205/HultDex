@@ -27,6 +27,8 @@ contract HultDexpool {
       
     }
 
+    event minted(address indexed sender, uint256 amount0, uint256 amount1);
+
     mapping (address => UserLiqiuidityPosition) public userLiqiuidityPosition;
 
     constructor(address _Token1) {
@@ -44,6 +46,14 @@ contract HultDexpool {
     }
 
 
+
+
+
+function initialize(address _token1) onlyOwner public {
+        Token1 = _token1;
+
+} 
+}
 
 
 
