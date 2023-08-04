@@ -90,17 +90,15 @@ function burn(uint128 _amount) external  returns (uint256 amount0){
 
     require(userLiqiuidityPosition[msg.sender].liquidity >= _amount, "amount must be less than or equal to your liquidity");
 
-   
-    return amount0;
-    
+    uint256 amount1 = IERC20(Token1).balanceOf(address(this));
 
+    amount0 = amount1 * _amount / userLiqiuidityPosition[msg.sender].liquidity;
 
+    require(IERC20(Token1).transfer(msg.sender, amount0));
 
+    userLiqiuidityPosition[msg.sender].liquidity = userLiqiuidityPosition[msg.sender].liquidity - _amount;
 
-
-
-
-
+    userLiqiuidityPosition[msg.sender].token1Amount = userLiqiuidityPosition[msg.sender].token1Amount - amount0;
 
 
 
