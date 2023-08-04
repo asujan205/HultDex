@@ -35,6 +35,10 @@ function AddLiquidity(uint256 amount) public {
     IERC20 token1 = IERC20(_token1address);
     token1.transferFrom(msg.sender, address(this), amount);
     totalBalance += amount;
+
+    _reverse1 += amount;
+
+
     userInfo[msg.sender].balance += amount;
     userInfo[msg.sender].lastContributionTime = block.timestamp;
     userInfo[msg.sender].interestRate = 100;
@@ -54,11 +58,17 @@ function WithdrawLiquidity(uint256 _amount) external {
     IERC20 token1 = IERC20(_token1address);
     token1.transferFrom(address(this), msg.sender, amount);
     totalBalance -= amount;
+    _reverse1 -= amount;
     userInfo[msg.sender].balance -= amount;
     userInfo[msg.sender].lastContributionTime = block.timestamp;
     userInfo[msg.sender].interestRate = 100;
     userInfo[msg.sender].contributionPeriod = 1000;
 }
+
+
+
+
+
 
     
 
