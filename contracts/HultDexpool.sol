@@ -53,6 +53,16 @@ function initialize(address _token1) onlyOwner public {
         Token1 = _token1;
 
 } 
+
+
+function setFee(uint256 fee) onlyOwner public {
+        _Fee = fee;
+}
+
+
+
+
+
 }
 
 
@@ -71,5 +81,5 @@ function initialize(address _token1) onlyOwner public {
 
 
     
-}
+
 
