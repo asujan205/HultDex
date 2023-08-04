@@ -65,7 +65,7 @@ function mint(address to, uint128 _amount) external  returns (uint256 amount){
 
     require(_amount > 0, "amount must be greater than 0");
 
-     require(IERC20(Token1).transferFrom(msg.sender, address(this), _amount));
+   
 
 
     userLiqiuidityPosition[to].liquidity = _amount;
@@ -103,6 +103,7 @@ function burn(uint128 _amount) external  returns (uint256 amount0){
 
 
 }
+
 
 
 
