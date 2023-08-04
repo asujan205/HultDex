@@ -35,6 +35,15 @@ contract HultDexpool {
     }
 
 
+    function getReverse() public view returns (uint256) {
+        return _reversePrice;
+    }
+
+    function getFee() public view returns (uint256) {
+        return _Fee;
+    }
+
+
 
 
 
